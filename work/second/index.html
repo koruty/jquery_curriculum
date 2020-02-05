@@ -27,6 +27,27 @@
       // .click() クリック時のイベントを登録する。
       // .fadeIn() 一定時間かけてフェードインする。
       // .fadeOut() 一定時間かけてフェードアウトする。
+      $(function() {
+        $('.modal-show').click(function() {
+          $('.modal').fadeIn();
+        });
+        /*
+        DOMを準備して、jQueryを実行する文を$(function(){})として表現。
+        {}の実行内容として、以降の処理を記述する。
+        まず、htmlにて指定されている<p class="modal-show">Click</p>という箇所について、clickイベントを作成するため、
+        $('.modal')にてクラスをセレクタとして指定。その後、fadeIn()メソッドを用いることで、「Click」という要素をクリックすると、
+        modalクラス要素の画面が徐々に表示されるという挙動となる。
+        */
+
+        $('.modal-close').click(function() {
+          $('.modal').fadeOut();
+        });
+        /*
+        htmlにて指定されている<button type="button" class="modal-close">x</button>という箇所について、
+        clickイベントを作成。セレクタとして$('.modal')を指定し、fadeOut()メソッドを用いることで、「x」をクリックすると、
+        modalクラスで指定された要素が徐々に消えていくという挙動となる。
+        */
+      });
     </script>
   </body>
 </html>
