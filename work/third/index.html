@@ -30,6 +30,36 @@
       // .eq() 引数に応じたindexの要素を指定します。
       // .addClass() クラスを追加します。
       // .removeClass() クラスを削除します。
+      $(function() {
+        $('.nav li').click(function() {
+          var index = $('.nav li').index(this);
+      /*
+      jQuery(document).ready(function(){});の省略構文である$(function(){});を指定し、DOM要素をjQueryで操作する構文を１文目で指定。
+      以下、function以下に処理を記述することで、webページ全体が読み込まれる前に、jQueryの処理を実行する。
+      まず、セレクタとして$('.nav li')と指定することで、navクラスの子要素であるli要素を対象に設定。
+      次に、click()メソッドを用いることで、navクラスの子要素であるli要素がクリックされた際の処理を記述している。
+      処理の内容としては、まず変数indexを用意し、$('.nav li').index(this)という値を代入。
+      値の内容としては、navクラスの子要素であるli要素のうち、クリックされた要素のインデックス番号を、index()メソッドにて取得する。
+      これにより、クリックされたli要素がどのインデックス番号であったかという内容が、変数indexに格納される。
+      */
+
+          $('.contents li').addClass('is-hidden')
+                           .eq(index)
+                           .removeClass('is-hidden');
+
+      /*まず、セレクタとして$('.contents li')と指定することにより、contentsクラスの子要素であるli要素を処理の対象として指定。
+      htmlにてclass="is-hidden"が指定されたli要素は、表示されない設定となっていることから、まずaddClass()メソッドにて、
+      全てのcontentsクラス内のli要素にis-hiddenというクラスを追加し、非表示の状態とする。
+      次に、メソッドチェーンにて、eq()メソッドを利用し、変数indexを引数として指定。
+      これにより、navクラスの子要素であるli要素のうち、クリックされた要素のインデックス番号が引数として追加される。
+      また、removeClass()メソッドを、eq()メソッドで指定した番号のli要素に適用することにより、クリックされた番号のli要素から、
+      is-hiddenというクラスが取り除かれ、その結果要素が表示される。
+      */
+        });
+      });
+
+
+
     </script>
   </body>
 </html>
