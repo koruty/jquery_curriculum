@@ -56,6 +56,43 @@
       // .next() 要素の隣の要素を取得します。これは使わなくてもできます。
       // .children() 要素の子要素を取得します。
       // .stop() 現在動作中のアニメーション処理を全て中止します。
+      //var index1 = $('.menu__list li').index(this);$('.menu__list li').eq(index1).stop();
+      
+      $(function(){
+        $('.menu__list li').hover(function() {
+        $(this).children('ul')
+               .stop()
+               .slideDown();
+        },
+        /*
+        jQuery(document).ready(function(){});の省略構文である$(function(){});を指定し、DOM要素をjQueryで操作する構文を１文目で指定。
+        また、function以下に処理を記述することで、webページ全体が読み込まれる前に、jQueryの処理を実行する。
+        まず、セレクタとして$('.menu__list li')と指定し、hover()メソッドを用いることで、メニューにhover時に、hover()の第一引数で記述された
+        処理が実行され、メニューへのhoverが離れた際に実行される処理を第二引数で記述する。
+        第一引数の内容としては、まずhoverの対象となる$('.menu__list li')を$(this)として指定。
+        htmlの方で、<ul>要素は子要素となっていることから、children()メソッドを用いて、対象を限定。
+        次にstop()メソッドを用いることで、hover時にqueueに格納されるアニメーションを削除出来るように指定。
+        これにより、hoverの回数だけslideDownのアニメーションが実行されるということを防ぐ。
+        最後に、slideDown()メソッドを用いてul要素がスライドされながら表示されるという動作を指定することで、
+        メニューをhoverすると隠れていた中のメニューが表示されるという動きとなる。
+        */
+        function() {
+        $(this).children('ul')
+               .stop()
+               .slideUp();
+        });
+        /*
+        第二引数の内容としては、第一引数と同様に、まずhoverから外れたときの操作の対象となる$('.menu__list li')を$(this)として指定。
+        htmlの方で、<ul>要素は子要素となっていることから、children()メソッドを用いて、対象を限定。
+        次にstop()メソッドを用いることで、hoverから離れた際にqueueに格納されるアニメーションを削除出来るように指定。
+        これにより、hoverから離れた回数だけslideUpのアニメーションが実行されるということを防ぐ。
+        最後に、slideUp()メソッドを用いてul要素がスライドされながら非表示になるという動作を指定することで、
+        メニューから離れると中のメニューが非表示になるという動きとなる。
+        */
+      });
+      
     </script>
   </body>
 </html>
+
+
