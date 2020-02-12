@@ -97,6 +97,60 @@
       // .data('') DOM要素にあるdata-~を取得できる
       // .change() セレクトボックスの値の変更をキャッチする関数
       // $().each() DOM要素を1つずつループ処理をする（ループ内で$(this)を使うと要素がひとつずつ取得できる）
+      
+      $(function() {
+        $('.select').change(function() {
+          var selectedValue = $(this).children('option:selected').val();
+      /*
+      jQuery(document).ready(function(){});の省略構文である$(function(){});を指定し、DOM要素をjQueryで操作する構文を１文目で指定。
+      以下、function以下に処理を記述することで、webページ全体が読み込まれる前に、jQueryの処理を実行する。
+      まず、htmlの方で記述されているセレクトボックスをセレクタとして指定するため、$('.select')として対象を指定。
+      次に、change()メソッドを用いることで、セレクトボックスが変更された際に実行される処理を以下で記述する。
+      まず、変数selectedValueを宣言し、$(this).children('option:selected').val()という値を代入。
+      値の内容は、変更されたセレクトボックスの子要素をセレクタとして指定するため、$(this).children('option:selected')と指定。
+      ここで、children()メソッドの引数として、option:selectedを用いることで、子要素のoption要素の中で、
+      セレクトボックスで選択された子要素のみがセレクト対象となるということを指定している。
+      また、val()メソッドを用いることで、htmlの方で記述されたvalue属性の値を取得出来るようになる。
+      結果として、セレクトボックスの方で選択されたvalueの値が、変数selectedValueに代入されるという動きとなる。
+      */
+        
+          $('.list li').each(function() {
+            var categoryData = $(this).data('category-type');
+            /*
+            セレクタとして$('.list li')と指定することで、リスト要素の中の各リスト項目を操作の対象として指定。
+            また、each()メソッドを用いることで、9つあるリスト項目について順に処理が行われることを記述。
+            次に変数categoryDataを宣言し、$(this).data('category-type')という値を代入。
+            値の内容としては、まずセレクタとして$(this)を指定し、dataメソッドを用いることで、htmlのli要素の中で定義されたdata-category-typeという
+            data属性の値を取得している。
+            */
+
+            if(selectedValue == categoryData) {
+              $(this).show();
+            /*
+            if文にて条件分岐を指定。if文の内容としては、まずセレクトボックスで選択されたvalueの値と、9つあるリスト項目のうち、data属性が一致した場合は
+            一致したリスト項目を表示させるという処理を、show()メソッドを用いて記述している。
+            */
+            } else if (selectedValue == 'all') {
+              $(this).show();
+            /*
+            次に、セレクトボックスにて選択されたvalueの値がallの場合は、9つあるリスト項目のうち全てを表示させるという処理をelse ifの中で記述している。
+            */
+            } else {
+              $(this).hide();
+            }
+            /*
+            最後に、全ての条件に当てはまらなかった場合は、そのリスト項目は非表示にするという処理を、hide()メソッドを用いてelse文の中に記述している。
+            以上の記述により、セレクトボックスにて指定されたoptionのvalueの値が一致したリスト項目があれば、それを表示、valueの値がallであれば全て
+            のリスト項目を表示、そのどちらでもないリスト項目については非表示という動きとなる。
+            */
+          });
+        });
+      });
+      
+
+
+    
+    
     </script>
   </body>
 </html>
