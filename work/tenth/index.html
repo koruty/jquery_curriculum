@@ -52,7 +52,6 @@
       //   console.log(data);
       // });
       //
-      //
       // $.ajaxによってデータが取得できたら、必要なデータ(作品名とか作者名とか)を取得します。
       // 取得できたらHTMLに<ul class='lists'></ul>を用意しているので、その中に下のテンプレに沿ってデータを入れ込みましょう。
       // <li class='lists__item'>
@@ -66,8 +65,143 @@
       //  </div>
       // </li>
       //
+      // $('.test').click(function(){
+      //   $.ajax({
+      //   type: 'GET',
+      //   url: 'ajaxテスト.html'
+      // }).done(function(data){
+      //   $('.text').html(data);
+      //   });
+      // }).fail(function(data){
+      //   alert('通信失敗');
+      // });
+      //if(data.count > 0){
+        // $('ul').empty();
+        //           $('ul').each(data.Items, function(){
+        //             console.log(data.Items);
+        //             var list = $();
+        //           });
+        //         } else if(data.count === 0){
+        //           console.log();
+        //         } else {
+        //           console.log();
+        //         };
+//keyword must be set
+//keyword length must be over 2 characters
+
       //
-      //
+        $(function() {
+
+          //ページ数カウント変数を宣言し、0を代入
+          var pageCount = 0;
+
+          //前回の検索単語を代入する変数を初期化＆宣言
+          var preWord = '';
+
+          //通信成功したものの、検索ヒット数が０だった時の処理
+          var notFound = '<p>検索結果が見つかりませんでした。<br>別のキーワードで検索して下さい。</p>';
+          
+          //通信エラー時に具体的なHTTPステータスコードが指定されていた場合に表示するテキスト
+          function errorMessage(responseMessage){
+            console.log(responseMessage);
+            $('ul').before('<div class="message"></div>');
+            $('.message').html(responseMessage);
+          };
+
+          //通信エラー時でどのHTTPステータスコードにも該当しなかった場合に表示するテキスト
+          function unknownError(){
+            var errorText = '<p>データ通信に失敗しました。<br>ご利用のネットワーク環境を確認して下さい。</p>';
+            console.log(errorText);
+            $('ul').before('<div class="message"></div>');
+            $('.message').html(errorText);
+          };
+
+          //通信成功時の処理
+          function searchList(data) {
+            console.log(data);
+            var list = '';　//検索結果をリスト表示する変数の宣言
+            if(data.hits > 0) {
+              $.each(data.Items, function(index, value){
+                list += "<li class='lists__item'>" + 
+                             "<div class='lists__item__inner'>" + 
+                               "<a href="+ value.Item.itemUrl +" class='lists__item__link' target='_blank'>" +
+                                 "<img src="+ value.Item.largeImageUrl +" class='lists__item__img' alt=''>" +
+                                 "<p class='lists__item__detail'>作品名："+ value.Item.title +　"</p>" +
+                                 "<p class='lists__item__detail'>作者　："+ value.Item.author +　"</p>" +
+                                 "<p class='lists__item__detail'>出版社："+ value.Item.publisherName +　"</p>" +
+                               "</a>" +
+                             "</div>" +
+                           "</li>";
+              });
+            } else {
+              $('ul').before('<div class="message"></div>');
+              $('.message').html(notFound);
+            }
+            $('ul').prepend(list);
+          };
+
+          //通信エラー時の処理
+          function connectionError(err) {
+            $('.message').remove();
+            console.log({err});
+            var responseMessage = err.responseJSON.error_description;
+
+            if(err.status === 400) {  
+              errorMessage(responseMessage);
+            } else if(err.status === 404) {
+              errorMessage(responseMessage);
+            } else if(err.status === 429) {
+              errorMessage(responseMessage);
+            } else if(err.status === 500) {
+              errorMessage(responseMessage);
+            } else if(err.status === 503) {
+              errorMessage(responseMessage);
+            } else {
+              unknownError();
+            };
+          };
+
+          //非同期処理
+          function ajaxRun() {
+            
+            $('.message').remove();
+            //取得した検索ワードを変数へ格納
+            var searchWord = $('.search__text__input').val();
+
+            if(searchWord === preWord){
+              pageCount += 1;
+            } else {
+              pageCount = 1;
+              $('ul').empty();
+            }
+
+            preWord = searchWord;
+            $.ajax({
+              url: 'https://app.rakuten.co.jp/services/api/BooksTotal/Search/20130522',
+              type: 'GET',
+              dataType: 'json',
+              data: {
+                // 「区分:サービス固有パラメーター」を確認して、必要な情報をdata内に入れましょう。
+                applicationId: '1019399324990976605', // (今回はこのIDを使用してください) ※IDは他サイト等には絶対に転載しないでください
+                booksGenreId: '001',
+                keyword: searchWord,
+                hits: 20,
+                page: pageCount
+            },
+            }).done(function(data) {
+              // この中にデータ取得後の動きを記述していきます。
+              searchList(data);
+            }).fail(function(err) {
+              connectionError(err);
+            });
+          }
+
+          //「検索する」ボタンをクリック時の処理
+          $('.search__btn').on('click', function() {
+            ajaxRun();
+          });
+
+        });
     </script>
   </body>
 </html>
